@@ -15,6 +15,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # Install .NET SDK (this is necessary for .NET Assembly Analysis)
+    - name: Install .NET SDK
+      run: |
+        wget https://packages.microsoft.com/config/ubuntu/22.04/prod.list
+        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install -y dotnet-sdk-8.0
+
     # Install and run OWASP Dependency-Check for security scanning
     - name: Install OWASP Dependency-Check
       run: |
