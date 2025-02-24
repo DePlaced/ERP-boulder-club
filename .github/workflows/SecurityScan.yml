@@ -1,0 +1,30 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security_scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Install and run OWASP Dependency-Check for security scanning
+    - name: Install OWASP Dependency-Check
+      run: |
+        wget https://github.com/jeremylong/DependencyCheck/releases/download/v6.5.0/dependency-check-6.5.0-release.zip
+        unzip dependency-check-6.5.0-release.zip
+        ./dependency-check/bin/dependency-check.sh --project "ERP-boulder-club" --scan ./ --exclude ./node_modules --exclude ./build --format "HTML" --out ./dependency-check-reports
+
+    # Upload Dependency-Check report as artifact
+    - name: Upload Dependency-Check report
+      uses: actions/upload-artifact@v2
+      with:
+        name: dependency-check-report
+        path: ./dependency-check-reports/*
