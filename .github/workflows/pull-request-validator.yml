@@ -1,10 +1,11 @@
 
-name: Pull Request Validator
+name: Pull Request Name Validator
 on:
   pull_request:
     types: [opened, synchronize]
 jobs:
   validate:
+    name: Pull Request Name Validator
     runs-on: ubuntu-latest
     steps:
       - name: Check PR Title Format
